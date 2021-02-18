@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 import br.com.alura.aluraviagens.R;
@@ -31,23 +32,30 @@ public class ResumoPacoteActivity extends AppCompatActivity {
 
         setTitle(TITULO_APPBAR);
 
-        Pacote pacoteSaoPaulo = new Pacote("São Paulo", "sao_paulo_sp",
-                2, new BigDecimal("243.99"));
+        Intent intent = getIntent();
+        if(intent.hasExtra("pacote"))
+        {
+            final Pacote pacote = (Pacote) intent.getSerializableExtra("pacote");
+            mostraLocal(pacote);
+            mostraImagem(pacote);
+            mostraDias(pacote);
+            mostraPreco(pacote);
+            mostraData(pacote);
 
-        mostraLocal(pacoteSaoPaulo);
-        mostraImagem(pacoteSaoPaulo);
-        mostraDias(pacoteSaoPaulo);
-        mostraPreco(pacoteSaoPaulo);
-        mostraData(pacoteSaoPaulo);
+            btnRealizarPagamento = findViewById(R.id.resumo_pacote_botao_realiza_pagamento);
+            btnRealizarPagamento.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(ResumoPacoteActivity.this, PagamentoActivity.class);
+                    intent.putExtra("pacote",pacote);
+                    startActivity(intent);
+                }
+            });
 
-        btnRealizarPagamento = findViewById(R.id.resumo_pacote_botao_realiza_pagamento);
-        btnRealizarPagamento.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ResumoPacoteActivity.this, PagamentoActivity.class);
-                startActivity(intent);
-            }
-        });
+        }
+
+
+
 
     }
 
